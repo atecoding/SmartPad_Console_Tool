@@ -16,7 +16,19 @@ static char ERROR_MSG[][128] = {
 
 char * get_error_msg(int errorno) {
 	int e = 0;
-	if (errorno > 0){
+	//printf("errorno =%d\n",errorno);
+	if (errorno == 0xe0 ){
+
+	} else if(errorno == 0xe2 ){
+		return "<Respond from Pad is wrong>";
+	}
+	else if(errorno == 0xe3 ){
+	
+	}
+	else if(errorno == 0xe4 ){
+	
+	}
+	else if (errorno > 0){
 		return "<Unknown,1>";
 	} else if(errorno == -1){
 		e = CONSOLE_ERROR_BASE;

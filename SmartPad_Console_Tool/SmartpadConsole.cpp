@@ -13,7 +13,7 @@
 #include "protocol.h"
 #include "padUsb.h"
 
-#define VERSION "v_0.0.2_20151228"
+#define VERSION "v_0.0.2_20151229"
 
 int main(int argc, char **argv) 
 {
@@ -115,16 +115,17 @@ int main(int argc, char **argv)
 	case 2:
 		ret = protocol.update_config(buf_in);
 		if (ret == 0) {
-			cout << "00_Update successfully";
+			cout << "00_Update config file successfully";
 		}
 		break;
 	case 3:
 		ret = protocol.reboot();
+		//cout << ret;
 		break;
 	case 4:
 		ret = protocol.update_ipk(buf_in);
 		if (ret == 0) {
-			cout << "00_Update successfully";
+			cout << "00_Update firmware successfully";
 			protocol.reboot();
 		}
 		break;
@@ -140,7 +141,6 @@ int main(int argc, char **argv)
 		delete SP;
 	}
 
-exit:
 	if (ret != 0) {
 		std:: cout << "01_"<< get_error_msg(ret);
 		return ret;

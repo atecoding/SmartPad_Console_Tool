@@ -8,7 +8,7 @@
 #define STX_LEN  (4)
 #define ETX_LEN  (2)
 #define DEFAULT_TMO (200)
-#define LOOP_DELAY  (30)
+#define LOOP_DELAY  (3)
 #define SENDFILE_FRAME_MAXDATA (1024)
 #define SIG_FNAME_MAX      16
 
@@ -215,6 +215,7 @@ int SmartProtocol::protocol_cmd(unsigned char* i_cmdsend, unsigned int i_cmdlen,
 
 	//memcpy(ppstr,"\xff\xff\xff\xaa\xaa\xaa",6);
 	i_cmdcount = i_trytime;
+	memset(str, 0 , sizeof(str));
 	while((i_cmdcount --) || (i_trytime == 0))
 	{
 		while((loop_time ++ ) <= (LOOP_DELAY / 3))
@@ -246,7 +247,7 @@ int SmartProtocol::protocol_cmd(unsigned char* i_cmdsend, unsigned int i_cmdlen,
 		else
 		{
 
-			m_ret = SIGLIB_RET_FAILED; //no respond and time out
+			m_ret = SIGLIB_RET_RESPONDERROR; //no respond and time out
 		}
 	}
 	//printf("protocol_cmd ret=%d\n", m_ret);
@@ -306,7 +307,7 @@ int SmartProtocol::reboot() {
 	unsigned int m_ret_len = 0;
 
 	memset(m_ret_data, 0x00, sizeof(m_ret_data));	
-	m_ret = protocol_cmd((unsigned char*)"\x92\x00\x00", 3, m_ret_data, &m_ret_len, 1, 1000);
+	m_ret = protocol_cmd((unsigned char*)"\x92\x00\x00", 3, m_ret_data, &m_ret_len, 1, 500);
 	if(m_ret != SIGLIB_RET_SUCCESS)
 	{
 		return m_ret;
@@ -508,6 +509,7 @@ int SmartProtocol::protocol_sendfile(unsigned char* filepath, unsigned char Cate
 	{
 		//pdlg->DoStep(IPK_UP_SENDF_H,5);
 		fclose(fp);
+		printf("\b\b\b\b");
 		return m_ret;
 	}
 	else
