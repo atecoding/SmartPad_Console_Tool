@@ -13,7 +13,7 @@
 #include "protocol.h"
 #include "padUsb.h"
 
-#define VERSION "v_0.0.2_20151227"
+#define VERSION "v_0.0.2_20151228"
 
 int main(int argc, char **argv) 
 {
@@ -35,6 +35,10 @@ int main(int argc, char **argv)
 			flow = 2;
 			if( (i+i < argc) && (argv[i+1] != NULL) && (argv[i+1][0] != 0x00) ) {
 				strcpy(buf_in, argv[i+1]);
+				if (!if_file_exit(buf_in)) {
+					cout << "01_<Can not find the file:" <<buf_in <<">";
+					return CONSOLE_ERROR_FILE_CAN_NOT_FOUND;
+				}
 			} else {
 				flow = 0xFFFF;
 			}
@@ -46,6 +50,10 @@ int main(int argc, char **argv)
 			flow = 4;
 			if( (i+i < argc) && (argv[i+1] != NULL) && (argv[i+1][0] != 0x00) ) {
 				strcpy(buf_in, argv[i+1]);
+				if (!if_file_exit(buf_in)) {
+					cout << "01_<Can not find " <<buf_in <<">";
+					return CONSOLE_ERROR_FILE_CAN_NOT_FOUND;
+				}
 			} else {
 				flow = 0xFFFF;
 			}
@@ -60,10 +68,10 @@ int main(int argc, char **argv)
 
 
 	if (flow == 0) {
-		cout << "01_<No valied paramter>";
+		cout << "01_<No valid parameter>";
 		return CONSOLE_ERROR_CANNOT_NO_VALIED_PARAM;
 	} else 	if (flow == 0xFFFF) {
-		cout << "01_<Paramter error>";
+		cout << "01_<Parameter error>";
 		return CONSOLE_ERROR_CANNOT_PARAM_ERROR;
 	} else if (flow == 6) {
 		std::cout << VERSION;
@@ -107,7 +115,7 @@ int main(int argc, char **argv)
 	case 2:
 		ret = protocol.update_config(buf_in);
 		if (ret == 0) {
-			cout << "00_update successfully";
+			cout << "00_Update successfully";
 		}
 		break;
 	case 3:
@@ -116,7 +124,7 @@ int main(int argc, char **argv)
 	case 4:
 		ret = protocol.update_ipk(buf_in);
 		if (ret == 0) {
-			cout << "00_update successfully";
+			cout << "00_Update successfully";
 			protocol.reboot();
 		}
 		break;
@@ -131,7 +139,8 @@ int main(int argc, char **argv)
 	if (SP != NULL) {
 		delete SP;
 	}
-	
+
+exit:
 	if (ret != 0) {
 		std:: cout << "01_"<< get_error_msg(ret);
 		return ret;

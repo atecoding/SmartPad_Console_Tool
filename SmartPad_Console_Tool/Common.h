@@ -9,6 +9,7 @@
 #define CONSOLE_ERROR_CANNOT_PARAM_ERROR	 -102
 #define CONSOLE_ERROR_CANNOT_NO_VALIED_PARAM -103
 #define CONSOLE_ERROR_FIRMWARE_DO_NOT_SUPPOR -104
-
+#define CONSOLE_ERROR_FILE_CAN_NOT_FOUND	 -105
 
 char * get_error_msg(int errorno);
+int if_file_exit(const char *path);
