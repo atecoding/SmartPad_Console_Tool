@@ -9,7 +9,6 @@
 ------------------------------------------------------------ */
 #pragma once
 #include <string>
-using namespace std;
 #include <windows.h>
 
 
@@ -30,7 +29,7 @@ using namespace std;
 返回值：
 	获取到的串口号
 */
-	string  WINAPI WDK_WhoAllVidPid(unsigned int pid, unsigned int vid);
+	std::string  WINAPI WDK_WhoAllVidPid(unsigned int pid, unsigned int vid);
 
 
 /*

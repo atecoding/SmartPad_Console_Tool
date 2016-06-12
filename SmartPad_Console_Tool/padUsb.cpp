@@ -42,23 +42,23 @@ int if_usb(int flag) {
 	if(flag ==0) {
 		return 0;
 	}
-  usb_init(); /* initialize the library */
-  usb_find_busses(); /* find all busses */
-  usb_find_devices(); /* find all connected devices */
+	usb_init(); /* initialize the library */
+	usb_find_busses(); /* find all busses */
+	usb_find_devices(); /* find all connected devices */
 
-  if(!(g_usb_dev = open_dev()))
-    {
-      //printf("error: device not found!\n");
-      return 0;
-    }
+	if(!(g_usb_dev = open_dev()))
+	{
+		//printf("error: device not found!\n");
+		return 0;
+	}
 
-  if(usb_claim_interface(g_usb_dev, 0) < 0)
-    {
-      //printf("error: claiming interface 0 failed\n");
-      usb_close(g_usb_dev);
-      return 0;
-    }
-  return 1;
+	if(usb_claim_interface(g_usb_dev, 0) < 0)
+	{
+		//printf("error: claiming interface 0 failed\n");
+		usb_close(g_usb_dev);
+		return 0;
+	}
+	return 1;
 }
 
 static int smartad_comm_reset(void) {
@@ -87,23 +87,23 @@ int lib_usb_open(void){
 		return 1;
 	}
 
-  usb_init(); /* initialize the library */
-  usb_find_busses(); /* find all busses */
-  usb_find_devices(); /* find all connected devices */
+	usb_init(); /* initialize the library */
+	usb_find_busses(); /* find all busses */
+	usb_find_devices(); /* find all connected devices */
 
-  if(!(g_usb_dev = open_dev()))
-    {
-      printf("error: device not found!\n");
-      return -1;
-    }
+	if(!(g_usb_dev = open_dev()))
+	{
+		printf("error: device not found!\n");
+		return -1;
+	}
 
-  if(usb_claim_interface(g_usb_dev, 0) < 0)
-    {
-      printf("error: claiming interface 0 failed\n");
-      usb_close(g_usb_dev);
-      return -1;
-    }
-  return 1;
+	if(usb_claim_interface(g_usb_dev, 0) < 0)
+	{
+		printf("error: claiming interface 0 failed\n");
+		usb_close(g_usb_dev);
+		return -1;
+	}
+	return 1;
 }
 
 int lib_usb_write(char *send_buf, int send_size, int send_timeout)

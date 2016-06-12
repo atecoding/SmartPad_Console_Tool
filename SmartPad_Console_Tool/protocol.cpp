@@ -38,12 +38,11 @@ unsigned char stx[STX_LEN] = {0x53,0x59,0x4E,0x43}; //SYNC
 unsigned char etx[ETX_LEN] = {0x45,0x4E} ; //EN
 
 SmartProtocol::SmartProtocol(SmartPort &p) :port(p)  {
-
+	return;
 }
 
 SmartProtocol::~SmartProtocol(void)  {
-
-
+	return;
 }
 
 

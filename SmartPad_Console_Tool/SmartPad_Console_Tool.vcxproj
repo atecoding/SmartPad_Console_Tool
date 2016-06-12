@@ -83,6 +83,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CommandTest.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="ComPortVidQuery.cpp" />
     <ClCompile Include="Cserial.cpp" />
@@ -92,6 +93,7 @@
     <ClCompile Include="SmartpadConsole.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommandTest.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ComPortVidQuery.h" />
     <ClInclude Include="Cserial.h" />
@@ -99,6 +101,8 @@
     <ClInclude Include="port.h" />
     <ClInclude Include="protocol.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="command.h" />
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SmartPad_Console_Tool.rc" />

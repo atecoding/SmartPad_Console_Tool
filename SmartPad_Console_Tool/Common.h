@@ -11,5 +11,7 @@
 #define CONSOLE_ERROR_FIRMWARE_DO_NOT_SUPPOR -104
 #define CONSOLE_ERROR_FILE_CAN_NOT_FOUND	 -105
 
+#define CONSOLE_TOOL_SUCCUSS				 0
+
 char * get_error_msg(int errorno);
 int if_file_exit(const char *path);

@@ -2,16 +2,15 @@
 #include "ComPortVidQuery.h"
 #include <tchar.h>
 #include <setupapi.h>
-//#include <string>
+#include <string>
 #include "iostream"
-using namespace std;
 
 #pragma comment (lib, "Setupapi.lib")
 
 #define DeviceInstanceIdSize 256	// 设备实例ID最大长度
 
 // 获取系统的VID和PID集合
-string WINAPI WDK_WhoAllVidPid(unsigned int pid, unsigned int vid)
+std::string WINAPI WDK_WhoAllVidPid(unsigned int pid, unsigned int vid)
 {
 	
 	HIDD_VIDPID* pVidPid=new HIDD_VIDPID[9];
@@ -19,7 +18,7 @@ string WINAPI WDK_WhoAllVidPid(unsigned int pid, unsigned int vid)
 	GUID* SetupClassGuid=NULL;
 	GUID* InterfaceClassGuid=NULL;
 	BYTE fname[128] = {0};
-	string COM(8,0);
+	std::string COM(8,0);
 	
 	// 根据设备安装类GUID创建空的设备信息集合
 	HDEVINFO DeviceInfoSet = SetupDiCreateDeviceInfoList( SetupClassGuid, NULL );
@@ -75,14 +74,14 @@ string WINAPI WDK_WhoAllVidPid(unsigned int pid, unsigned int vid)
 				sizeof(fname),
 				NULL);
 
-			string str2(57, '0');
-			string s2="COM";
+			std::string str2(57, '0');
+			std::string s2="COM";
 			for (int i=0;i<56;i++)
 			{
 				str2[i]=(char)fname[i];
 			}
 
-			if (str2.find(s2) != string::npos)
+			if (str2.find(s2) != std::string::npos)
 			{
 				int num = str2.find(s2);
 				COM  = str2.substr(num,5);
