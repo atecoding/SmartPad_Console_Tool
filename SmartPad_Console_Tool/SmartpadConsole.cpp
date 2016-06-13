@@ -105,8 +105,7 @@ static int parse_cmd(int argc, char **argv, char *out, int out_len, char ***argv
 			else 
 			{
 				cmd = CMD_ERROR;
-			}
-			
+			}		
 		}
 		i++;
 	}

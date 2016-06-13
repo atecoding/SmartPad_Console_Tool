@@ -641,3 +641,21 @@ int SmartProtocol:: update_config(char *config_path) {
 
 	return SIGLIB_RET_SUCCESS;
 }
+
+
+int SmartProtocol::print(char* buff, int len) {
+
+	unsigned char m_ret;
+	unsigned char m_ret_data[1024];
+	unsigned int m_ret_len = 0;
+
+	memset(m_ret_data, 0x00, sizeof(m_ret_data));	
+	m_ret = protocol_cmd((unsigned char*)buff, len, m_ret_data, &m_ret_len, 1, 500);
+	if(m_ret != SIGLIB_RET_SUCCESS)
+	{
+		return m_ret;
+	}
+	if(m_ret_data[0] != 0x92)
+		m_ret = SIGLIB_RET_RESPONDERROR;
+	return m_ret;
+}
