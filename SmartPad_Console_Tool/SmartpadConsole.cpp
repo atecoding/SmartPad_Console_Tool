@@ -17,11 +17,18 @@
 #include "CommandTest.h"
 
 static int if_query_usb = 0;
+SmartProtocol *protocol;
 
 static int help(char *which)
 {
-
-
+	std::cout << "If you use the usb port, please type usb+ first, suppoted command:" << std::endl;
+	std::cout << "\t" << "reboot" << std::endl;
+	std::cout << "\t" << "check_firmware" << std::endl;
+	std::cout << "\t" << "check_config" << std::endl;
+	std::cout << "\t" << "firmware FILE_PATH" << std::endl;
+	std::cout << "\t" << "config FILE_PATH" << std::endl;
+	std::cout << "\t" << "test" << std::endl;
+	std::cout << "\t\t" << "test -c XX.c";
 	return 0;
 }
 
@@ -30,6 +37,11 @@ static int parse_cmd(int argc, char **argv, char *out, int out_len, char ***argv
 	int i = 0;
 	int cmd  = 0;
 	char buf_in[512] = {0};
+
+	if (argc <= 0) {
+		exit(1);
+		std::cout << "01_<command error>";
+	}
 
 	while(i < argc)
 	{
@@ -43,7 +55,7 @@ static int parse_cmd(int argc, char **argv, char *out, int out_len, char ***argv
 		}
 		else if ( !strcmp(argv[i], "config") && cmd == CMD_VALID)
 		{
-			cmd = CMD_CHECK_CONFIG_VERSION;
+			cmd = CMD_UPDATE_CONFIG;
 			if ( (i + i < argc) && (argv[i + 1] != NULL) && (argv[i + 1][0] != 0x00) ) 
 			{
 				strcpy(buf_in, argv[i + 1]);
@@ -81,26 +93,24 @@ static int parse_cmd(int argc, char **argv, char *out, int out_len, char ***argv
 		}
 		else if ( !strcmp(argv[i], "check_config") && cmd == CMD_VALID)
 		{
-			cmd = CMD_UPDATE_CONFIG;
+			cmd = CMD_CHECK_CONFIG_VERSION;
 		} 
 		else if ( !strcmp(argv[i], "version") && cmd == CMD_VALID)
 		{
 			cmd = CMD_GET_TOOL_VERSION;
+			break;
 		} 
-		else if (!strcmp(argv[i], "test") && cmd == CMD_VALID)
+		else if ( !strcmp(argv[i], "help") && cmd == CMD_VALID)
 		{
-			cmd = CMD_GET_TOOL_HELP; 
-			if( (i + 1 < argc) && (argv[i + 1] != NULL) && (argv[i + 1][0] != 0x00) )
-			{
-				strcpy(buf_in, argv[i + 1]);
-			} 
-		}
+			cmd = CMD_GET_TOOL_HELP;
+			break;
+		} 
 		else if (!strcmp(argv[i], "test") && cmd == CMD_VALID) 
 		{
 			cmd = CMD_TEST;
 			if( (i + 1 < argc) && (argv[i + 1] != NULL) && (argv[i + 1][0] != 0x00) )
 			{
-				*argv_out = &argv[i + i];
+				*argv_out = &argv[i + 1];
 			} 
 			else 
 			{
@@ -109,7 +119,7 @@ static int parse_cmd(int argc, char **argv, char *out, int out_len, char ***argv
 		}
 		i++;
 	}
-	vsnprintf(out, out_len, "%s", buf_in);
+	_snprintf(out, out_len, "%s", buf_in);
 	return cmd;
 
 }
@@ -118,13 +128,13 @@ int main(int argc, char **argv)
 {
 	int iComN = 0, i = 1;
 	unsigned char buf_out[1024 + 1] = {0};
-	char buf_in[512 + 1] = {0};
+	char buf_in[512] = {0};
 	int flow = CMD_VALID, ret = 0;
 	SmartPort * SP = NULL;
 	char **argv2 = NULL;
 
-	flow = parse_cmd(argc, argv, buf_in, sizeof buf_in, &argv2);
-	
+	flow = parse_cmd(argc - 1, argv + 1, buf_in, sizeof buf_in, &argv2);
+
 	if (flow == CMD_VALID) 
 	{
 		std::cout << "01_<No valid parameter>";
@@ -173,41 +183,41 @@ int main(int argc, char **argv)
 		}
 	}
 
-	
-	SmartProtocol protocol(*SP);
+
+
+	protocol = new SmartProtocol(*SP);
 
 	switch (flow) {
 	case CMD_CHECK_FIRMWARE_VERSION: 
-		ret = protocol.get_ipk_version((char *)buf_out);
+		ret = protocol->get_ipk_version((char *)buf_out);
 		if( ret == 0) {
 			std:: cout << "00_" << buf_out;
 		}
 		break;
 	case CMD_UPDATE_CONFIG:
-		ret = protocol.update_config(buf_in);
+		ret = protocol->update_config(buf_in);
 		if (ret == 0) {
 			std::cout << "00_Update config file successfully";
 		}
 		break;
 	case CMD_REBOOT:
-		ret = protocol.reboot();
+		ret = protocol->reboot();
 		//cout << ret;
 		break;
 	case CMD_UPDATE_FIRMWARE:
-		ret = protocol.update_ipk(buf_in);
+		ret = protocol->update_ipk(buf_in);
 		if (ret == 0) {
 			std::cout << "00_Update firmware successfully";
-			protocol.reboot();
+			protocol->reboot();
 		}
 		break;
 	case CMD_CHECK_CONFIG_VERSION:
-		ret = protocol.get_config_version((char *)buf_out);
+		ret = protocol->get_config_version((char *)buf_out);
 		if (ret == 0) {
 			std:: cout << "00_" << buf_out;
 		}
 		break;
 	case CMD_TEST:
-		std::cout << "after test:" << argv2[0] << std::endl;
 		return command_test(protocol, argv2);
 	}
 

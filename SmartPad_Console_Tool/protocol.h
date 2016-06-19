@@ -23,7 +23,7 @@ public:
 	int get_config_version(char *version);
 	int update_config(char *config_path);
 	int update_ipk(char *ipk_path);
-	int print(char *buff, int len);
+	int print(char *buff, int len, char *ret_data, int *ret_len);
 	int reboot();
 };
 

@@ -16,7 +16,7 @@ static char ERROR_MSG[][128] = {
 
 char * get_error_msg(int errorno) {
 	int e = 0;
-	//printf("errorno =%d\n",errorno);
+	printf("errorno =%d\n",errorno);
 	if (errorno == 0xe0 ){
 
 	} else if(errorno == 0xe2 ){

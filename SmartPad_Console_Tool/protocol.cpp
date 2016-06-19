@@ -309,7 +309,7 @@ int SmartProtocol::reboot() {
 	m_ret = protocol_cmd((unsigned char*)"\x92\x00\x00", 3, m_ret_data, &m_ret_len, 1, 500);
 	if(m_ret != SIGLIB_RET_SUCCESS)
 	{
-		return m_ret;
+		return m_ret;												
 	}
 	if(m_ret_data[0] != 0x92)
 		m_ret = SIGLIB_RET_RESPONDERROR;
@@ -643,19 +643,25 @@ int SmartProtocol:: update_config(char *config_path) {
 }
 
 
-int SmartProtocol::print(char* buff, int len) {
+int SmartProtocol::print(char *buff, int len, char *ret_data, int *ret_len) {
 
 	unsigned char m_ret;
 	unsigned char m_ret_data[1024];
 	unsigned int m_ret_len = 0;
 
 	memset(m_ret_data, 0x00, sizeof(m_ret_data));	
+
 	m_ret = protocol_cmd((unsigned char*)buff, len, m_ret_data, &m_ret_len, 1, 500);
+	
 	if(m_ret != SIGLIB_RET_SUCCESS)
 	{
 		return m_ret;
 	}
 	if(m_ret_data[0] != 0x92)
 		m_ret = SIGLIB_RET_RESPONDERROR;
+	if (m_ret_len >= 4) {
+		*ret_len = m_ret_len - 4;
+		memcpy(ret_data, &m_ret_data[4], *ret_len); 
+	}
 	return m_ret;
 }
