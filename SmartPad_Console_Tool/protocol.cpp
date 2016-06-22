@@ -651,7 +651,7 @@ int SmartProtocol::print(char *buff, int len, char *ret_data, int *ret_len) {
 
 	memset(m_ret_data, 0x00, sizeof(m_ret_data));	
 
-	m_ret = protocol_cmd((unsigned char*)buff, len, m_ret_data, &m_ret_len, 1, 500);
+	m_ret = protocol_cmd((unsigned char*)buff, len, m_ret_data, &m_ret_len, 1, 50000);
 	
 	if(m_ret != SIGLIB_RET_SUCCESS)
 	{
